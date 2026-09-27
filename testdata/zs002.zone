@@ -1,0 +1,5 @@
+; ZS002 — SOA present but no NS record at the apex.
+$TTL 3600
+$ORIGIN example.com.
+@       IN SOA  ns1.example.com. hostmaster.example.com. 2026092701 1h 15m 1w 5m
+@       IN A    192.0.2.1

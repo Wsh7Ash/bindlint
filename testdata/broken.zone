@@ -1,0 +1,58 @@
+; broken.zone — a deliberately broken demo zone for bindlint.
+; Every finding below is intentional; see README.md for the full report.
+$TTL 3600
+$ORIGIN example.com.
+
+; --- a structurally valid apex -------------------------------------------
+@ 1h IN SOA ns1.example.com. hostmaster.example.com. (
+        2026092701  ; serial
+        1h          ; refresh
+        15m         ; retry
+        1w          ; expire
+        5m          ; minimum
+        )
+@       IN NS   ns1.example.com.
+
+; ZS003: CNAME next to other data at the same owner (web has an address too)
+www     3600 IN A      192.0.2.10
+www     3600 IN CNAME  web.example.com.
+web     3600 IN A      192.0.2.20
+
+; ZS004: CNAME loop
+loop1   3600 IN CNAME  loop2.example.com.
+loop2   3600 IN CNAME  loop1.example.com.
+
+; ZS005: CNAME target inside the zone with no records
+gone    3600 IN CNAME  nowhere.example.com.
+
+; ZS006: duplicate identical record
+dup     3600 IN A      192.0.2.99
+dup     3600 IN A      192.0.2.99
+
+; ZS007: malformed TTL (bad time unit)
+badttl  30x  IN A      192.0.2.30
+
+; ZS008: invalid IPv4 literal
+badip   3600 IN A      999.1.2.3
+
+; ZS009: malformed SRV (missing target)
+_sip._tcp 3600 IN SRV  10 5 0
+
+; ZS011: inconsistent TTLs at one owner
+ttl-a   300  IN A      192.0.2.40
+ttl-a   3600 IN A      192.0.2.41
+
+; ZS013: MX exchange inside the zone has no A/AAAA (mail is never defined)
+@       IN MX   10 mail.example.com.
+
+; ZS014: TXT string longer than 255 octets (single quoted chunk)
+longtxt 3600 IN TXT    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
+
+; ZS015: wildcard shadowed by explicit names under the same parent
+*.example.com. 3600 IN A 192.0.2.200
+
+; ZS016: TTL above the configured maximum
+bigttl  999999 IN A    192.0.2.60
+
+; ZS019: $INCLUDE is skipped (never followed)
+$INCLUDE other.zone

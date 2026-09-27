@@ -1,0 +1,22 @@
+; clean.zone — a small but complete zone that must produce zero findings.
+$TTL 3600
+$ORIGIN example.com.
+
+@ 1h IN SOA ns1.example.com. hostmaster.example.com. (
+        2026092701 ; serial
+        1h         ; refresh
+        15m        ; retry
+        1w         ; expire
+        5m         ; minimum
+        )
+@       IN NS    ns1.example.com.
+@       IN A     192.0.2.1
+@       IN AAAA  2001:db8::1
+@       IN MX    10 mail.example.com.
+@       IN TXT   "v=spf1 mx -all"
+
+_dmarc.example.com. IN TXT "v=DMARC1; p=none"
+
+ns1.example.com.    IN A 192.0.2.53
+mail.example.com.   IN A 192.0.2.25
+www                 IN A 192.0.2.10

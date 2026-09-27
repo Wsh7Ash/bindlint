@@ -1,0 +1,22 @@
+CODE    SEVERITY  DESCRIPTION
+ZS001   error     no SOA record at the zone apex
+ZS002   error     no NS record at the zone apex
+ZS003   error     CNAME coexists with other data at the same owner
+ZS004   error     CNAME target chain forms a loop
+ZS005   error     CNAME target inside the zone has no records
+ZS006   error     duplicate identical record
+ZS007   error     malformed record: bad TTL, bad time unit or unparseable fields
+ZS008   error     invalid IP address literal in A or AAAA record
+ZS009   error     malformed SRV record
+ZS010   warning   no $TTL directive in the zone file
+ZS011   warning   inconsistent TTLs across records at the same owner
+ZS012   warning   zone apex has no A or AAAA record
+ZS013   warning   MX exchange inside the zone has no A/AAAA record
+ZS014   warning   TXT string longer than 255 octets
+ZS015   warning   wildcard coexists with an explicit record under the same parent
+ZS016   warning   TTL above the configured maximum
+ZS017   warning   relative name used but no origin is set
+ZS018   info      apex has no SPF or DMARC TXT records
+ZS019   info      $INCLUDE encountered and skipped
+
+19 rules (errors: 9, warnings: 8, info: 2)

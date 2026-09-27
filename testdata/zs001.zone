@@ -1,0 +1,5 @@
+; ZS001 — no SOA record anywhere in the zone.
+$TTL 3600
+$ORIGIN example.com.
+@       IN NS   ns1.example.com.
+@       IN A    192.0.2.1

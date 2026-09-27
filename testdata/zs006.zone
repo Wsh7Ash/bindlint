@@ -1,0 +1,5 @@
+; ZS006 — the same record appears twice.
+$TTL 3600
+$ORIGIN example.com.
+dup     IN A 192.0.2.99
+dup     IN A 192.0.2.99

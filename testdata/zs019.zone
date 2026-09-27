@@ -1,0 +1,5 @@
+; ZS019 — $INCLUDE is reported and skipped; the file is never opened.
+$TTL 3600
+$ORIGIN example.com.
+$INCLUDE sub.zone
+@       IN A 192.0.2.1

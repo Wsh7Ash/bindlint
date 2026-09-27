@@ -1,0 +1,5 @@
+; ZS011 — the same owner carries two different TTLs.
+$TTL 3600
+$ORIGIN example.com.
+same    300  IN A 192.0.2.1
+same    3600 IN A 192.0.2.2

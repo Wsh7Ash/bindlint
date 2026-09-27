@@ -1,0 +1,4 @@
+; ZS016 — TTL above the default maximum of 68400 seconds.
+$TTL 3600
+$ORIGIN example.com.
+big     999999 IN A 192.0.2.60

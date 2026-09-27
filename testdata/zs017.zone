@@ -1,0 +1,4 @@
+; ZS017 — relative names with no $ORIGIN and no --origin.
+$TTL 3600
+www     IN A 192.0.2.10
+@       IN NS ns1

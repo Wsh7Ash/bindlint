@@ -1,0 +1,5 @@
+; ZS007 — TTL with an unknown time unit; the line is skipped, parsing continues.
+$TTL 3600
+$ORIGIN example.com.
+bad     30x  IN A 192.0.2.30
+good    3600 IN A 192.0.2.31

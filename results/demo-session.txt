@@ -1,0 +1,87 @@
+$ bindlint lint testdata/clean.zone
+bindlint 1.0.0 — lint testdata/clean.zone
+zone origin: example.com.
+
+clean: no findings in testdata/clean.zone (10 records parsed)
+exit=$?
+
+$ bindlint lint testdata/broken.zone --fail-on warning
+bindlint 1.0.0 — lint testdata/broken.zone
+zone origin: example.com.
+
+WARNING ZS012 (line 1): zone apex "example.com." has no A or AAAA record
+  owner: example.com.
+  why:   The origin name itself almost always needs an address record: the zone apex is where the domain is resolved from, and its absence usually means the main website or mail front-end will not resolve.
+  fix:   Add an apex address record such as `@ IN A 192.0.2.10` (and/or `@ IN AAAA 2001:db8::10`).
+
+INFO    ZS018 (line 1): zone has no SPF TXT at the apex (v=spf1) and no DMARC TXT at _dmarc.example.com.
+  owner: example.com.
+  why:   Modern sending domains publish an SPF record (`v=spf1`) at the apex and a DMARC policy at `_dmarc.<zone>`. Their absence is not an outage, but mail receivers will treat the domain more strictly.
+  fix:   Publish `@ IN TXT "v=spf1 ..."` and `_dmarc.<zone>. IN TXT "v=DMARC1; p=none"` if you send mail from this domain.
+
+ERROR   ZS003 (line 18): CNAME at "www.example.com." coexists with A record(s) (RFC 2181 section 10.1)
+  owner: www.example.com.
+  why:   RFC 2181 section 10.1 states that a CNAME record is incompatible with every other record type at the same owner name. Configurations such as CNAME plus A at the same name make resolver behaviour undefined and are rejected by BIND at load time.
+  fix:   Either drop the CNAME and keep the address records, or keep the CNAME and move the other data (for example the MX or TXT records) to a different name.
+
+ERROR   ZS004 (line 22): CNAME loop detected: loop1.example.com. -> loop2.example.com. -> loop1.example.com.
+  owner: loop1.example.com.
+  why:   A CNAME must point to a name that eventually resolves to a different record type (RFC 1034 section 3.6.6). A cycle such as a -> b -> a can never terminate, so every query for the names in the loop fails, often with a server-side loop error that is hard to trace back to the zone file.
+  fix:   Break the chain: make the last CNAME in the loop point at the real final name (an A, AAAA or other record), not back at an earlier name.
+
+ERROR   ZS005 (line 26): CNAME target "nowhere.example.com." is inside the zone but has no records
+  owner: gone.example.com.
+  why:   When a CNAME target is a name inside this zone and no record exists for that target, every lookup of the alias fails with NXDOMAIN after the delegation is live. The reference is dangling inside the authoritative data.
+  fix:   Create the target name in this zone (typically an A/AAAA record), or point the CNAME at a name that exists here or at an out-of-zone name you control.
+
+ERROR   ZS006 (line 30): duplicate of the identical record on line 29 (dup.example.com. A 192.0.2.99)
+  owner: dup.example.com.
+  why:   The same record twice (same owner, class, type, rdata and TTL) is redundant data that usually indicates a copy/paste error. It bloats transfers and can mask the intended edit.
+  fix:   Delete one of the duplicate lines and keep a single copy of the record.
+
+ERROR   ZS007 (line 33): bad TTL "30x": unknown time unit "x"
+  owner: badttl.example.com.
+  why:   The parser could not make sense of the line (for example a TTL with an unknown unit, a missing type, or a field with the wrong syntax). bindlint recovers line by line: the bad line is skipped and parsing continues, so later problems are still reported.
+  fix:   Fix the reported line: use TTL units s, m, h, d or w (for example `5m` or `1h30m`), and check that the record has a type and the right number of rdata fields.
+
+ERROR   ZS008 (line 36): A record "999.1.2.3" is not a valid IPv4 address literal
+  owner: badip.example.com.
+  why:   An A record must contain a dotted-quad IPv4 address and an AAAA record an IPv6 address (RFC 1035 section 3.3.14, RFC 3596). An unparseable or wrong-family literal makes the record unusable and BIND will refuse the zone.
+  fix:   Replace the value with a valid address of the right family, for example `192.0.2.10` for A or `2001:db8::10` for AAAA.
+
+ERROR   ZS009 (line 39): SRV record needs 4 fields (priority weight port target), got 3
+  owner: _sip._tcp.example.com.
+  why:   SRV rdata must be four fields: priority, weight, port and target (RFC 2782). Missing fields or non-numeric numbers make the record unusable; the target `.` (root) is legal and means 'no service'.
+  fix:   Write the record as `_<service>._<proto>. IN SRV <priority> <weight> <port> <target>` with 16-bit unsigned numbers.
+
+WARNING ZS011 (line 43): inconsistent TTLs at "ttl-a.example.com.": 300, 3600 seconds
+  owner: ttl-a.example.com.
+  why:   Records at one name carrying different TTLs make caching behaviour unpredictable and are usually a sign that one of the values was edited by mistake (RFC 2181 section 8).
+  fix:   Pick one TTL for the name and apply it to all of its records (or rely on a single $TTL).
+
+WARNING ZS013 (line 46): MX exchange "mail.example.com." is inside the zone but has no A or AAAA record
+  owner: example.com.
+  why:   Mail is delivered to the host named in the MX exchange. When that host is inside this zone but has no address record here, delivery fails after the zone goes live. The check only applies to exchanges inside the zone origin; out-of-zone exchanges are not visible offline.
+  fix:   Add an A/AAAA record for the exchange host in this zone, or point the MX at a name that has one.
+
+WARNING ZS014 (line 49): TXT segment 1 is 281 octets (limit 255)
+  owner: longtxt.example.com.
+  why:   A single TXT character-string is limited to 255 octets (RFC 1035 section 3.3). Longer strings are rejected by strict servers; long values such as SPF or DKIM records must be split into multiple quoted strings inside one TXT record.
+  fix:   Split the value into quoted chunks of at most 255 octets: `TXT "part1" "part2"` (the chunks are concatenated by the resolver).
+
+WARNING ZS015 (line 52): wildcard "*.example.com." is shadowed for explicit name(s) under "example.com.": www.example.com., web.example.com., loop1.example.com. (+8 more)
+  owner: *.example.com.
+  why:   A wildcard `*.example.com` never applies to names that have their own records (RFC 4592 section 2.2.1). When an explicit name such as `www.example.com` exists alongside the wildcard, the wildcard is shadowed for that name, which surprises operators who expect the wildcard to cover it.
+  fix:   If the explicit record is intended, keep it and remember the wildcard does not cover that name; otherwise remove one of the two.
+
+WARNING ZS016 (line 55): TTL 999999 at "bigttl.example.com." exceeds the maximum 68400
+  owner: bigttl.example.com.
+  why:   Very long TTLs (above 68400 seconds by default) pin stale answers in caches for a long time and make emergency changes slow to take effect. bindlint flags any effective TTL above the configurable maximum.
+  fix:   Lower the TTL, or raise the ceiling explicitly with `--max-ttl` if the long TTL is intentional.
+
+INFO    ZS019 (line 58): $INCLUDE other.zone is not supported and was skipped; its records were not loaded
+  why:   bindlint is an offline linter and deliberately does not follow $INCLUDE: included files are not read, so records inside them are not linted. The directive is reported for awareness.
+  fix:   Lint each included file separately, or inline the included content before running bindlint.
+
+summary: 7 errors, 6 warnings, 2 info — 19 records parsed, 15 findings
+exit=$?

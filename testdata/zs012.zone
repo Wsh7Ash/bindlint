@@ -1,0 +1,6 @@
+; ZS012 — the apex has no A or AAAA record.
+$TTL 3600
+$ORIGIN example.com.
+@       IN SOA  ns1.example.com. hostmaster.example.com. 2026092701 1h 15m 1w 5m
+@       IN NS   ns1.example.com.
+ns1     IN A    192.0.2.53

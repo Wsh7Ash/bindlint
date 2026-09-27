@@ -1,0 +1,97 @@
+{
+  "file": "testdata/clean.zone",
+  "origin": "example.com.",
+  "records": [
+    {
+      "line": 5,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": true,
+      "class": "IN",
+      "type": "SOA",
+      "rdata": "ns1.example.com. hostmaster.example.com. 2026092701 3600 900 604800 300"
+    },
+    {
+      "line": 12,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "NS",
+      "rdata": "ns1.example.com."
+    },
+    {
+      "line": 13,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "A",
+      "rdata": "192.0.2.1"
+    },
+    {
+      "line": 14,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "AAAA",
+      "rdata": "2001:db8::1"
+    },
+    {
+      "line": 15,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "MX",
+      "rdata": "10 mail.example.com."
+    },
+    {
+      "line": 16,
+      "owner": "example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "TXT",
+      "rdata": "\"v=spf1 mx -all\""
+    },
+    {
+      "line": 18,
+      "owner": "_dmarc.example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "TXT",
+      "rdata": "\"v=DMARC1; p=none\""
+    },
+    {
+      "line": 20,
+      "owner": "ns1.example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "A",
+      "rdata": "192.0.2.53"
+    },
+    {
+      "line": 21,
+      "owner": "mail.example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "A",
+      "rdata": "192.0.2.25"
+    },
+    {
+      "line": 22,
+      "owner": "www.example.com.",
+      "ttl": 3600,
+      "ttl_set": false,
+      "class": "IN",
+      "type": "A",
+      "rdata": "192.0.2.10"
+    }
+  ],
+  "findings": []
+}

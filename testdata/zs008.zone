@@ -1,0 +1,4 @@
+; ZS008 — invalid IPv4 literal in an A record.
+$TTL 3600
+$ORIGIN example.com.
+badip   IN A 999.1.2.3

@@ -1,0 +1,7 @@
+; ZS018 — apex TXT records exist, but neither SPF nor DMARC.
+$TTL 3600
+$ORIGIN example.com.
+@       IN SOA  ns1.example.com. hostmaster.example.com. 2026092701 1h 15m 1w 5m
+@       IN NS   ns1.example.com.
+@       IN A    192.0.2.1
+@       IN TXT  "some unrelated text"

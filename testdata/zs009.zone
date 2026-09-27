@@ -1,0 +1,4 @@
+; ZS009 — SRV record missing the target field (RFC 2782 requires four fields).
+$TTL 3600
+$ORIGIN example.com.
+_sip._tcp IN SRV 10 5 0

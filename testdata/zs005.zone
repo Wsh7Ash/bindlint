@@ -1,0 +1,4 @@
+; ZS005 — CNAME target is inside the zone but has no records.
+$TTL 3600
+$ORIGIN example.com.
+gone    IN CNAME nowhere.example.com.

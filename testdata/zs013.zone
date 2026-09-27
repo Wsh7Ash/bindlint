@@ -1,0 +1,4 @@
+; ZS013 — MX exchange is inside the zone but has no address record here.
+$TTL 3600
+$ORIGIN example.com.
+@       IN MX 10 mail.example.com.

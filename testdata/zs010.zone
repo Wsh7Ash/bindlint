@@ -1,0 +1,5 @@
+; ZS010 — no $TTL directive, so bare TTLs fall back to the SOA minimum.
+$ORIGIN example.com.
+@       IN SOA  ns1.example.com. hostmaster.example.com. 2026092701 1h 15m 1w 5m
+@       IN NS   ns1.example.com.
+@       IN A    192.0.2.1

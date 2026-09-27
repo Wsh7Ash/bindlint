@@ -1,0 +1,5 @@
+; ZS003 — CNAME coexists with an A record at the same owner (RFC 2181).
+$TTL 3600
+$ORIGIN example.com.
+www     IN A     192.0.2.10
+www     IN CNAME web.example.com.

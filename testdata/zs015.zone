@@ -1,0 +1,5 @@
+; ZS015 — wildcard and explicit name share the same parent domain.
+$TTL 3600
+$ORIGIN example.com.
+*.example.com. IN A 192.0.2.200
+www            IN A 192.0.2.10

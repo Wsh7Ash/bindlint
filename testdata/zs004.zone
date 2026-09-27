@@ -1,0 +1,5 @@
+; ZS004 — CNAME chain forms a two-node loop.
+$TTL 3600
+$ORIGIN example.com.
+a       IN CNAME b.example.com.
+b.example.com. IN CNAME a.example.com.
